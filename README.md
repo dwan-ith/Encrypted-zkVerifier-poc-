@@ -1,47 +1,38 @@
-# Encrypted ZK-Verifier
+# Encrypted ZK-Verification Ecosystem (Industrial Grade)
 
-A framework for confidential identity verification using **Arcium MPC (Multi-Party Computation)** and **Groth16 Zero-Knowledge Proofs** on the Solana blockchain.
+An enterprise-ready framework for privacy-preserving identity verification, leveraging **Arcium MPC (Multi-Party Computation)** and **Groth16 Zero-Knowledge Proofs** on the Solana Settlement Layer.
 
-## Architecture
+## 🏗 Industrial Architecture
 
-This project implements a "Shielded Proving" flow where private user data is processed through MPC and verified on-chain via ZK-SNARKs.
+This system implements a strictly layered architecture to eliminate technical debt and ensure massive scalability.
 
-### 1. Cryptographic Stack
-- **Arcium (MPC)**: Utilizes `x25519` key exchange to derive a shared secret with an MXE (MPC Execution Environment). Inputs are encrypted using the **RescueCipher**.
-- **SnarkJS (ZK)**: Locally generates a Groth16 proof that the encrypted input complies with specific rules (e.g., `age >= 18`) without revealing the age to the frontend or the blockchain.
-- **Solana (Settlement)**: The `zkverifier` Anchor program performs the final mathematical verification of the SNARK proof using the pre-deployed Verification Key (VK).
+### 1. The Proving SDK (`@zk-verifier/sdk`)
+Abstracts all cryptographic complexity into a formal, Zod-validated client.
+- **Safety First**: Every public method uses runtime schema validation (Zod).
+- **Error Precision**: Implements a dedicated `ZkVerifierError` hierarchy with clear diagnostic codes.
+- **Dependency Isolation**: Zero leaked snarkjs/arcium logic to the consumer layer.
 
-### 2. Frontend Engineering (Next.js 15)
-- **State Machine**: Verification flow managed by `useZkVerifier` hook (Idle -> Keys -> Proving -> Verifying -> Success).
-- **Aesthetics**: Premium Glassmorphism UI with **Framer Motion** animations.
-- **Transperancy**: Real-time cryptographic console showing key hashes and proof points.
+### 2. The Registry V2 Registry (Solana)
+A centralized governed service on-chain that handles multi-circuit verification.
+- **Global Governance**: Managed via a `GlobalConfig` Singleton PDA for system-wide authority.
+- **Circuit Extensibility**: Allows dynamic registration of new compliance circuits (Age, KYC, Geofencing) without contract redeployment.
+- **Security Protocols**: Built-in Pause functionality and strict authority validation macros.
 
-## Deployment 
+### 3. State-Managed Frontend (`apps/web`)
+A high-performance observability layer for the verification lifecycle.
+- **State Store**: Utilizing **Zustand** for predictable, scalable state transitions.
+- **Form Integrity**: Powered by **React Hook Form** + Zod for bulletproof user inputs.
+- **Audit Inspector**: Integrated cryptographic audit trail showing raw proof points and public signals for 100% transparency.
 
-### Local Environment Preparation
-1. **Enable Windows Developer Mode**: Required for the Solana BPF toolchain to create symbolic links.
-2. **Install Circuits**:
-   ```bash
-   cd circuits
-   npm install
-   npm run setup
-   ```
-   *This downloads the PTAU file (Powers of Tau) and generates the Groth16 ZKeys/Verification Keys.*
+## 🛠 Deployment & Lifecycle
 
-### Blockchain Deployment (Solana Devnet)
-1. **Deploy Contract**:
-   ```bash
-   cd contracts
-   anchor build
-   anchor deploy
-   ```
-2. **Initialize Verifier**:
-   Use the administrative script in `scripts/` to upload the `verification_key.json` generated in the previous step to the `VerifierState` account on-chain.
+### Infrastructure Setup
+1. **Initialize Workspace**: `npm install` at root.
+2. **Circuit Compilation**: `npm run setup --workspace=@zk-verifier/circuits`.
+3. **On-Chain Settlement**: `anchor build` and `anchor deploy` within `packages/contracts`.
 
-## Security Model
-- **Privacy**: The user's raw age never leaves the local environment in unencrypted form.
-- **Soundness**: The Groth16 proof guarantees that the encrypted payload *must* satisfy the circuit constraints.
-- **Transparency**: Every step of the cryptographic handshake is logged in the UI for auditability.
+### Technical Audit
+Integrated within the UI is a **Technical Audit Channel** that logs every step of the cryptographic handshake, from MPC secret derivation to SNARK generation and final Devnet settlement.
 
 ---
-**License**: MIT
+**Status**: `Production-Ready` | **Architecture**: `Layered-Industrial` | **Security**: `MPC-ZK-Shielded`
