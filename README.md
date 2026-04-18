@@ -1,8 +1,8 @@
-# Encrypted ZK-Verifier: Production Engineering Specification
+# Encrypted ZK-Verifier
 
-A high-performance framework for confidential identity verification using **Arcium MPC (Multi-Party Computation)** and **Groth16 Zero-Knowledge Proofs** on the Solana blockchain.
+A framework for confidential identity verification using **Arcium MPC (Multi-Party Computation)** and **Groth16 Zero-Knowledge Proofs** on the Solana blockchain.
 
-## 🏗 Architecture Overview
+## Architecture
 
 This project implements a "Shielded Proving" flow where private user data is processed through MPC and verified on-chain via ZK-SNARKs.
 
@@ -16,7 +16,7 @@ This project implements a "Shielded Proving" flow where private user data is pro
 - **Aesthetics**: Premium Glassmorphism UI with **Framer Motion** animations.
 - **Transperancy**: Real-time cryptographic console showing key hashes and proof points.
 
-## 🛠 Deployment Specification
+## Deployment 
 
 ### Local Environment Preparation
 1. **Enable Windows Developer Mode**: Required for the Solana BPF toolchain to create symbolic links.
@@ -38,10 +38,10 @@ This project implements a "Shielded Proving" flow where private user data is pro
 2. **Initialize Verifier**:
    Use the administrative script in `scripts/` to upload the `verification_key.json` generated in the previous step to the `VerifierState` account on-chain.
 
-## 🔐 Security Model
+## Security Model
 - **Privacy**: The user's raw age never leaves the local environment in unencrypted form.
 - **Soundness**: The Groth16 proof guarantees that the encrypted payload *must* satisfy the circuit constraints.
 - **Transparency**: Every step of the cryptographic handshake is logged in the UI for auditability.
 
 ---
-**Status**: `v1.0.0-PROD-READY` | **License**: MIT
+**License**: MIT
