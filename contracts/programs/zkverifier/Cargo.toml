@@ -16,5 +16,5 @@ default = []
 
 [dependencies]
 anchor-lang = "0.30.1"
-groth16-solana = { git = "https://github.com/Lightprotocol/groth16-solana.git", branch = "main" }  # For Groth16 verification
+groth16-solana = { git = "https://github.com/Lightprotocol/groth16-solana.git", branch = "master" }
 solana-program = "1.18.0"

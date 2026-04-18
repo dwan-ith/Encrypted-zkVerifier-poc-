@@ -8,7 +8,7 @@
     "contracts"
   ],
   "scripts": {
-    "setup": "npm install --workspace=circuits --workspace=frontend"
+    "setup": "npm install --workspace=circuits --workspace=frontend && cd circuits && node scripts/setup.js"
   },
   "devDependencies": {
     "typescript": "^5.0.0"

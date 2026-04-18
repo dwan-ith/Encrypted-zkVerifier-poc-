@@ -1,0 +1,8 @@
+[package]
+name = "encrypted-zk-verifier"
+version = "0.1.0"
+authors = ["YourName"]
+
+[clusters.devnet]
+offset = 0  # Typical offset for devnet, adjust if specific deployment requires it
+rpc_url = "https://api.devnet.solana.com"

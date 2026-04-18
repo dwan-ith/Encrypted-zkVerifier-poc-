@@ -1,0 +1,43 @@
+# Dependencies
+node_modules/
+.pnp
+.pnp.js
+dist/
+coverage/
+
+# Next.js
+.next/
+out/
+
+# Solana / Anchor
+target/
+**/*.json
+!package.json
+!tsconfig.json
+!next-env.d.ts
+!package-lock.json
+!Arcium.toml
+!Anchor.toml
+
+# Keypairs & Secrets
+*-keypair.json
+id.json
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# ZK Build Artifacts
+/circuits/build/
+/circuits/pot12_final.ptau
+
+# Tooling
+anchor/
+solana-release/
+platform-tools-windows.tar.bz2
+solana-release.tar.bz2
+
+# Misc
+.DS_Store
+*.log
