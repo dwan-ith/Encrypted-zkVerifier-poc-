@@ -1,0 +1,11 @@
+{
+  "name": "@zk-verifier/sdk",
+  "version": "1.0.0",
+  "main": "src/index.ts",
+  "dependencies": {
+    "@solana/web3.js": "^1.91.0",
+    "@coral-xyz/anchor": "^0.30.1",
+    "@arcium-hq/client": "latest",
+    "snarkjs": "^0.7.4"
+  }
+}

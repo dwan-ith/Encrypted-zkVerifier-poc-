@@ -1,16 +1,21 @@
 {
-  "name": "encrypted-zkverifier",
+  "name": "zk-verifier-monorepo",
   "version": "1.0.0",
   "private": true,
   "workspaces": [
-    "circuits",
-    "frontend",
-    "contracts"
+    "apps/*",
+    "packages/*"
   ],
   "scripts": {
-    "setup": "npm install --workspace=circuits --workspace=frontend && cd circuits && node scripts/setup.js"
+    "dev": "npm run dev --workspace=@zk-verifier/web",
+    "build:web": "npm run build --workspace=@zk-verifier/web",
+    "build:circuits": "npm run build --workspace=@zk-verifier/circuits",
+    "setup": "npm run setup --workspace=@zk-verifier/circuits",
+    "anchor:build": "cd packages/contracts && anchor build",
+    "anchor:deploy": "cd packages/contracts && anchor deploy"
   },
   "devDependencies": {
-    "typescript": "^5.0.0"
+    "typescript": "^5.0.0",
+    "turbo": "latest"
   }
 }

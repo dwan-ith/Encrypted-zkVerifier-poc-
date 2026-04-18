@@ -1,0 +1,11 @@
+{
+  "name": "circuits",
+  "version": "1.0.0",
+  "dependencies": {
+    "circomlib": "^2.0.0",
+    "snarkjs": "^0.7.0"
+  },
+  "scripts": {
+    "setup": "node scripts/setup.js"
+  }
+}
