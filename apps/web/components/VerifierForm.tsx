@@ -16,7 +16,7 @@ import {
 import { ZkVerifierClient, ValidationError } from "@zk-verifier/sdk";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
-import { useVerificationStore } from "../store/useVerificationStore";
+import { useVerificationStore, VerifierStage } from "../store/useVerificationStore";
 import { CONFIG } from "../config";
 
 // Formal input schema
@@ -25,8 +25,6 @@ const FormSchema = z.object({
 });
 
 type FormData = z.infer<typeof FormSchema>;
-
-export type VerifierStage = "idle" | "exchanging" | "encrypting" | "proving" | "verifying" | "success" | "error";
 
 export function VerifierForm() {
   const { publicKey, signTransaction } = useWallet();

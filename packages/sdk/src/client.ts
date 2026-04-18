@@ -17,6 +17,7 @@ export interface ZkVerifierConfig {
 
 export class ZkVerifierClient {
   private program: Program;
+  private config: ZkVerifierConfig;
   
   constructor(
     private provider: anchor.AnchorProvider,
@@ -27,6 +28,8 @@ export class ZkVerifierClient {
     if (!result.success) {
       throw new ValidationError("Invalid Client Configuration", result.error.format());
     }
+
+    this.config = config;
 
     // IDL will be exported from the @zk-verifier/idl package in a real build
     const placeholderIdl = { address: config.programId.toString(), metadata: { name: "zkverifier" }, instructions: [] };
@@ -59,18 +62,19 @@ export class ZkVerifierClient {
 
       // 3. Solana Registry Logic (Settlement)
       return await this.submitToRegistry(circuitId, proof, publicSignals);
-    } catch (err: any) {
+    } catch (err: unknown) {
       if (err instanceof ZkVerifierError) throw err;
-      throw new ZkVerifierError(ZkVerifierErrorCode.ON_CHAIN_VERIFICATION_FAILED, err.message, err);
+      const message = err instanceof Error ? err.message : String(err);
+      throw new ZkVerifierError(ZkVerifierErrorCode.ON_CHAIN_VERIFICATION_FAILED, message, err);
     }
   }
 
   private async deriveMxeSharedSecret() {
     try {
       const privateKey = x25519.utils.randomSecretKey();
-      const mxePublicKey = await getMXEPublicKey(this.provider, (this.program.idl as any).arciumProgramId || PublicKey.default);
+      const mxePublicKey = await getMXEPublicKey(this.provider, this.config.arciumProgramId);
       return x25519.getSharedSecret(privateKey, mxePublicKey);
-    } catch (err: any) {
+    } catch (err: unknown) {
       throw new MpcError("Failed to derive shared secret with Arcium MXE", err);
     }
   }
@@ -79,15 +83,15 @@ export class ZkVerifierClient {
     try {
       return await snarkjs.groth16.fullProve(
         { age },
-        (this.program.idl as any).wasmPath || "",
-        (this.program.idl as any).zkeyPath || ""
+        this.config.circuitWasmPath,
+        this.config.circuitZkeyPath
       );
-    } catch (err: any) {
+    } catch (err: unknown) {
       throw new ZkVerifierError(ZkVerifierErrorCode.PROOF_GENERATION_FAILED, "Local SNARK generation failed", err);
     }
   }
 
-  private async submitToRegistry(circuitId: string, proof: any, publicSignals: any) {
+  private async submitToRegistry(circuitId: string, proof: { pi_a: string[], pi_b: string[][], pi_c: string[] }, publicSignals: string[]) {
     const [globalConfig] = PublicKey.findProgramAddressSync([Buffer.from("global-config")], this.program.programId);
     const [circuitRegistry] = PublicKey.findProgramAddressSync([Buffer.from("circuit"), Buffer.from(circuitId)], this.program.programId);
     const [verificationState] = PublicKey.findProgramAddressSync(
@@ -105,7 +109,7 @@ export class ZkVerifierClient {
         Array.from(proofA),
         Array.from(proofB),
         Array.from(proofC),
-        publicInputs.map((i: any) => Array.from(i))
+        publicInputs.map((i) => Array.from(i))
       )
       .accounts({
         verificationState,
